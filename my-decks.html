@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Anki Go - My Decks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <meta name="description" content="Anki Go - AI-powered flashcard platform for students and learners.">
+  <meta name="author" content="Iced Coffee">
+
+  <!-- Performance: Preconnect -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+  <!-- Progressive Web App -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Anki Go">
+  <meta name="theme-color" content="#000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Anki Go">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Bootswatch Minty Theme (Bootstrap 5) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3/dist/minty/bootstrap.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+
+  <!-- Custom styles -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap');
+
+    :root {
+        --purple-50: #faf7ff; /* Existing light theme */
+        --purple-100: #f3ecff;
+        --purple-300: #d9c7ff;
+        --purple-500: #b99bff;
+        --purple-600: #9a7ff;
+        --purple-700: #7e5eff;
+        --purple-900: #4b2b99; /* Existing dark theme */
+        --white-900: #ffffff;
+        --black-900: #010000;
+
+        /* Refined Neon Palette for Luxury Cyberpunk */
+        --color-neon-purple-deep: #7a00ff; /* Deeper purple */
+        --color-neon-blue-electric: #008cff; /* More electric blue */
+        --color-neon-magenta-vibrant: #ff00c3; /* More vibrant magenta */
+        --color-dark-surface: #0f0f12; /* Darker, sophisticated surface */
+        --color-dark-glass: rgba(25, 25, 30, 0.7); /* For layered panels, semi-transparent */
+        --color-metallic-sheen: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.1) 100%);
+
+        /* Text colors for the new card style */
+        --color-card-text-primary: #e0e0e0; /* Bright for main info */
+        --color-card-text-secondary: #a0a0b0; /* Subtler for details */
+    }
+
+    /* General Body/Navbar/Footer still follow Bootstrap's purple theme from index.html */
+    .bg-primary-subtle { background-color: var(--purple-50) !important; }
+    [data-bs-theme="dark"] .bg-primary-subtle { background-color: var(--purple-900) !important; }
+    .navbar .navbar-brand, .navbar .navbar-brand * { color: var(--purple-700) !important; }
+    [data-bs-theme="dark"] .navbar .navbar-brand, [data-bs-theme="dark"] .navbar .navbar-brand * { color: var(--purple-300) !important; }
+
+    /* Buttons */
+    .btn-primary {
+        background-color: var(--purple-50) !important;
+        border-color: var(--purple-600) !important;
+        color: var(--purple-700) !important; /* Ensure text is visible in light mode */
+        box-shadow: 0 2px 6px rgba(248, 248, 250, 0.12);
+    }
+    .btn-primary:hover, .btn-primary:focus {
+        background-color: rgba(249, 249, 249, 0.06) !important;
+        border-color: var(--purple-700) !important;
+        color: var(--purple-700) !important; /* Ensure text is visible in light mode hover */
+    }
+    [data-bs-theme="dark"] .btn-primary {
+        background-color: var(--purple-700) !important;
+        border-color: var(--purple-600) !important;
+        color: var(--white-900) !important; /* Ensure text is visible in dark mode */
+    }
+    [data-bs-theme="dark"] .btn-primary:hover, [data-bs-theme="dark"] .btn-primary:focus {
+        background-color: var(--purple-600) !important;
+        border-color: var(--purple-500) !important;
+        color: var(--white-900) !important; /* Ensure text is visible in dark mode hover */
+    }
+
+    /* Specific override for 'Sign up' button text in navbar to ensure visibility */
+    .navbar .btn-primary, 
+    [data-bs-theme="dark"] .navbar .btn-primary {
+        color: var(--white-900) !important; /* Force white text */
+    }
+
+    .btn-outline-secondary {
+        border-color: var(--purple-700);
+        color: var(--purple-700);
+    }
+    .btn-outline-secondary:hover {
+        background-color: var(--purple-700);
+        color: var(--white-900);
+    }
+    [data-bs-theme="dark"] .btn-outline-secondary {
+        border-color: var(--purple-300);
+        color: var(--purple-300);
+    }
+    [data-bs-theme="dark"] .btn-outline-secondary:hover {
+        background-color: var(--purple-300);
+        color: var(--black-900);
+    }
+
+    /* Links */
+    a, .nav-link { color: var(--purple-700) !important; }
+    [data-bs-theme="dark"] a, [data-bs-theme="dark"] .nav-link { color: var(--purple-300) !important; }
+    a:hover { color: var(--purple-900) !important; }
+    [data-bs-theme="dark"] a:hover { color: var(--purple-100) !important; }
+    .text-primary { color: var(--purple-700) !important; }
+    [data-bs-theme="dark"] .text-primary { color: var(--purple-300) !important; }
+
+    /* Card shadow */
+    .card.shadow-lg { box-shadow: 0 12px 30px rgba(123,87,255,0.09) !important; }
+
+    /* Page spacing */
+    .pt-navbar { padding-top: 72px; }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .container.content-section {
+      flex: 1;
+      padding-top: 50px;
+      padding-bottom: 50px;
+    }
+
+    /* Footer styling to match theme */
+    footer {
+        background-color: var(--purple-100);
+        border-top: 1px solid var(--purple-300);
+        color: var(--purple-700);
+        padding: 20px 0;
+        font-family: 'Rajdhani', sans-serif;
+    }
+    [data-bs-theme="dark"] footer {
+        background-color: var(--purple-900);
+        border-top: 1px solid var(--purple-700);
+        color: var(--purple-300);
+    }
+    footer a {
+        color: var(--purple-700);
+        text-decoration: none;
+    }
+    [data-bs-theme="dark"] footer a {
+        color: var(--purple-300);
+    }
+    footer a:hover {
+        color: var(--purple-900);
+        text-decoration: underline;
+    }
+    [data-bs-theme="dark"] footer a:hover {
+        color: var(--purple-100);
+        text-decoration: underline;
+    }
+
+    /* Advanced Futuristic Deck Card Design */
+    .deck-card, .kanji-card {
+        position: relative;
+        background: 
+            radial-gradient(ellipse at top left, var(--color-neon-blue-electric) 0%, transparent 50%),
+            radial-gradient(ellipse at bottom right, var(--color-neon-purple-deep) 0%, transparent 50%),
+            linear-gradient(160deg, var(--color-dark-surface), var(--color-dark-surface) 60%, rgba(25,25,30,0.8));
+        background-blend-mode: overlay, overlay, normal;
+        border: none;
+        border-radius: 18px; /* Slightly more rounded */
+        overflow: hidden;
+        box-shadow: 
+            0 0 15px rgba(0, 140, 255, 0.8), /* Electric blue glow */
+            0 0 30px rgba(122, 0, 255, 0.7), /* Deep purple glow */
+            0 0 50px rgba(255, 0, 195, 0.6), /* Vibrant magenta glow */
+            inset 0 0 10px rgba(255,255,255,0.1); /* Inner subtle highlight */
+        transition: all 0.4s ease-in-out;
+        font-family: 'Rajdhani', sans-serif;
+        color: var(--color-card-text-primary);
+    }
+
+    .deck-card:hover, .kanji-card:hover {
+        box-shadow: 
+            0 0 20px rgba(0, 140, 255, 1),
+            0 0 40px rgba(122, 0, 255, 0.9),
+            0 0 70px rgba(255, 0, 195, 0.8),
+            inset 0 0 15px rgba(255,255,255,0.15);
+        transform: translateY(-8px) scale(1.03);
+    }
+
+    /* Holographic texture and metallic accents via pseudo-elements */
+    .deck-card::before, .deck-card::after, .kanji-card::before, .kanji-card::after {
+        content: '';
+        position: absolute;
+        z-index: 0;
+    }
+
+    .deck-card::before, .kanji-card::before { /* Main holographic layer */
+        top: -10%; left: -10%; right: -10%; bottom: -10%;
+        background: repeating-linear-gradient(45deg, 
+            rgba(0,234,255,0.05), rgba(0,234,255,0.05) 5px,
+            transparent 5px, transparent 10px
+        );
+        opacity: 0.15;
+        animation: holographic-scan 15s infinite linear;
+        pointer-events: none;
+    }
+
+    .deck-card::after, .kanji-card::after { /* Iridescent sheen/edge glow overlay */
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(135deg, 
+            rgba(0, 140, 255, 0.2) 0%, /* Electric Blue */
+            rgba(122, 0, 255, 0.2) 25%, /* Deep Purple */
+            rgba(255, 0, 195, 0.2) 50%, /* Vibrant Magenta */
+            rgba(122, 0, 255, 0.2) 75%, 
+            rgba(0, 140, 255, 0.2) 100%
+        );
+        opacity: 0.3;
+        mix-blend-mode: screen; /* Blend for iridescent effect */
+        animation: iridescent-shift 10s infinite alternate;
+        pointer-events: none;
+    }
+
+    @keyframes holographic-scan {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(20px, 20px); }
+    }
+
+    @keyframes iridescent-shift {
+        0% { filter: hue-rotate(0deg); opacity: 0.3; }
+        50% { filter: hue-rotate(90deg); opacity: 0.4; }
+        100% { filter: hue-rotate(0deg); opacity: 0.3; }
+    }
+
+    .card-body {
+        position: relative;
+        z-index: 1; /* Ensure content is above holographic effect */
+        color: var(--color-card-text-primary);
+    }
+
+    .card-title.text-primary,
+    .deck-title-editable {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--color-neon-blue-electric) !important;
+        text-shadow: 0 0 8px var(--color-neon-blue-electric), 0 0 15px rgba(0, 140, 255, 0.6);
+    }
+
+    .card-text {
+        color: var(--color-card-text-secondary);
+    }
+
+    /* Kanji card specific styles for create-deck.html (for selection) */
+    .kanji-card {
+        background: linear-gradient(145deg, #181820, #0d0d10); /* Slightly different dark base for distinction */
+        border: 1px solid var(--color-dark-surface);
+        box-shadow: 0 0 5px var(--color-neon-purple-deep);
+    }
+
+    .kanji-card.kanji-card-selected {
+        border-color: var(--color-neon-purple-deep);
+        box-shadow: 
+            0 0 10px var(--color-neon-purple-deep),
+            0 0 20px var(--color-neon-magenta-vibrant);
+    }
+
+    /* Practice flashcard styling (canvas) - Base styles, detailed drawing in JS */
+    #flashcard {
+        background: transparent; /* Canvas will draw its own complex background */
+        border-radius: 18px; /* Match deck card roundedness */
+        box-shadow: 
+            0 0 25px rgba(0, 140, 255, 0.9),
+            0 0 50px rgba(122, 0, 255, 0.8),
+            0 0 80px rgba(255, 0, 195, 0.7);
+        transition: all 0.5s ease-in-out;
+    }
+
+    /* Heatmap styles if they need adjustments */
+    #calendarHeatmapContainer svg text {
+        font-family: 'Rajdhani', sans-serif;
+        fill: var(--purple-700); /* Adjust to match light theme text */
+    }
+    [data-bs-theme="dark"] #calendarHeatmapContainer svg text {
+        fill: var(--purple-300); /* Adjust to match dark theme text */
+    }
+
+    /* Confirmation Modal styles */
+    .modal-content {
+        background: linear-gradient(145deg, var(--purple-50), var(--purple-100));
+        border: 1px solid var(--purple-300);
+        box-shadow: 0 0 10px rgba(123,87,255,0.2);
+        color: var(--purple-900);
+    }
+    [data-bs-theme="dark"] .modal-content {
+        background: linear-gradient(145deg, var(--purple-900), #010000);
+        border: 1px solid var(--purple-700);
+        box-shadow: 0 0 15px rgba(123,87,255,0.4);
+        color: var(--white-900);
+    }
+    .modal-header, .modal-footer {
+        border-color: var(--purple-300);
+    }
+    [data-bs-theme="dark"] .modal-header, [data-bs-theme="dark"] .modal-footer {
+        border-color: var(--purple-700);
+    }
+    .modal-title {
+        color: var(--purple-700);
+        font-family: 'Orbitron', sans-serif;
+    }
+    [data-bs-theme="dark"] .modal-title {
+        color: var(--purple-300);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-md navbar-light fixed-top bg-primary-subtle">
+    <div class="container-fluid">
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <a class="navbar-brand fw-bold" href="./index.html">
+        Anki Go
+      </a>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link fw-bold" href="./index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link fw-bold" href="./create-deck.html">Create a Deck</a></li>
+          <li class="nav-item"><a class="nav-link fw-bold active" aria-current="page" href="./my-decks.html">My Decks</a></li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown me-2">
+            <a class="nav-link dropdown-toggle" href="#" id="bd-theme" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-circle-half"></i>
+              <span class="visually-hidden">Toggle theme</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme">
+              <li><button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light"><i class="bi bi-sun-fill"></i><span class="ms-2">Light</span></button></li>
+              <li><button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark"><i class="bi bi-moon-stars-fill"></i><span class="ms-2">Dark</span></button></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="./login.html" class="btn btn-outline-info fw-bold me-2">Log in</a></li>
+          <li class="nav-item"><a href="./signup.html" class="btn btn-primary fw-bold">Sign up</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container content-section">
+    <h1 class="text-primary fw-bold">My Decks</h1>
+    <p class="lead">Manage your personalized flashcard collections.</p>
+
+    <div id="decksList" class="row mt-4">
+      <!-- Decks will be loaded here -->
+    </div>
+
+    <div id="practiceSection" style="display: none;" class="mt-4 text-center">
+      <h2 class="text-primary fw-bold" id="practiceDeckName"></h2>
+      <div class="d-flex justify-content-center align-items-center my-3" id="card-counters">
+        <div id="counter">Card 1/10</div>
+        <div id="knowCounter">Known: 0</div>
+        <div id="dontKnowCounter">Unknown: 0</div>
+      </div>
+      
+      <canvas id="flashcard" width="600" height="400" class="mx-auto"></canvas>
+
+      <div class="mt-4 control-buttons">
+        <button id="prevBtn" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Previous</button>
+        <button id="flipBtn" class="btn btn-info"><i class="bi bi-arrow-repeat"></i> Flip Card</button>
+        <button id="nextBtn" class="btn btn-secondary">Next <i class="bi bi-arrow-right"></i></button>
+        <br>
+        <button id="knowBtn" class="btn btn-success mt-3"><i class="bi bi-check-circle"></i> I Know This!</button>
+        <button id="dontKnowBtn" class="btn btn-danger mt-3"><i class="bi bi-x-circle"></i> Don't Know</button>
+        <br>
+        <button id="unknownOnlyBtn" class="btn btn-warning mt-3"><i class="bi bi-question-circle"></i> Show Unknown Only</button>
+        <button id="resetBtn" class="btn btn-dark mt-3"><i class="bi bi-arrow-counterclockwise"></i> Reset All</button>
+      </div>
+      <button id="backToDecksBtn" class="btn btn-link mt-4"><i class="bi bi-arrow-left-circle"></i> Back to My Decks</button>
+    </div>
+
+    <h2 class="text-primary fw-bold mt-5">Review Heatmap</h2>
+    <p class="lead">Visualize your daily card review activity.</p>
+    <div class="d-flex align-items-center justify-content-center mt-3 mb-5">
+      <button id="prevHeatmapBtn" class="btn btn-sm btn-outline-secondary me-2"><i class="bi bi-arrow-left"></i></button>
+      <div id="calendarHeatmapContainer" class="d-flex justify-content-center"></div>
+      <button id="nextHeatmapBtn" class="btn btn-sm btn-outline-secondary ms-2"><i class="bi bi-arrow-right"></i></button>
+    </div>
+
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;" id="toastContainer"></div>
+
+  <!-- Confirmation Modal -->
+  <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="confirmationModalBody">
+          Are you sure?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmActionButton">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer mt-auto py-4 bg-primary-subtle">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="text-muted">&copy; 2025 Anki Go. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <ul class="list-inline">
+            <li class="list-inline-item"><a href="#" class="text-muted">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="#" class="text-muted">Terms of Service</a></li>
+            <li class="list-inline-item"><a href="#" class="text-muted">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    // Color Mode Toggler
+    function initializeColorModeToggler() {
+      const root = document.documentElement;
+      const storageKey = 'theme';
+      const getStored = () => localStorage.getItem(storageKey);
+      const setStored = val => localStorage.setItem(storageKey, val);
+      const getPreferred = () => {
+        const stored = getStored();
+        if (stored === 'light' || stored === 'dark') return stored;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+      const applyTheme = theme => { root.setAttribute('data-bs-theme', theme); setStored(theme); };
+      applyTheme(getPreferred());
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => { if (!getStored()) applyTheme(e.matches ? 'dark' : 'light'); });
+      document.querySelectorAll('[data-bs-theme-value]').forEach(btn => { btn.addEventListener('click', () => applyTheme(btn.getAttribute('data-bs-theme-value'))); });
+    }
+    window.addEventListener('DOMContentLoaded', initializeColorModeToggler);
+
+    // New: Generic Confirmation Modal Function
+    function showConfirmationModal(title, message) {
+      return new Promise((resolve) => {
+        const modalElement = document.getElementById('confirmationModal');
+        const modalTitle = document.getElementById('confirmationModalLabel');
+        const modalBody = document.getElementById('confirmationModalBody');
+        const confirmButton = document.getElementById('confirmActionButton');
+
+        if (!modalElement || !modalTitle || !modalBody || !confirmButton) {
+          console.error("Confirmation modal elements not found.");
+          resolve(false); // Resolve with false if elements are missing
+          return;
+        }
+
+        modalTitle.textContent = title;
+        modalBody.textContent = message;
+
+        const bootstrapModal = new bootstrap.Modal(modalElement);
+        bootstrapModal.show();
+
+        const onConfirm = () => {
+          confirmButton.removeEventListener('click', onConfirm);
+          modalElement.removeEventListener('hidden.bs.modal', onCancelOrHide);
+          bootstrapModal.hide();
+          resolve(true);
+        };
+
+        const onCancelOrHide = () => {
+          confirmButton.removeEventListener('click', onConfirm);
+          modalElement.removeEventListener('hidden.bs.modal', onCancelOrHide);
+          resolve(false);
+        };
+        
+        confirmButton.addEventListener('click', onConfirm);
+        modalElement.addEventListener('hidden.bs.modal', onCancelOrHide);
+      });
+    }
+
+    // New: Global variables for heatmap
+    let currentHeatmapEndDate = new Date(); // This will be the *latest* day of the 7-day view (leftmost box)
+    const numDaysToShow = 7; // The number of days displayed in the heatmap
+    const todayNormalized = new Date();
+    todayNormalized.setHours(0, 0, 0, 0); // Normalize today for accurate comparison
+
+    // New: Get heatmap navigation buttons
+    const prevHeatmapBtn = document.getElementById('prevHeatmapBtn');
+    const nextHeatmapBtn = document.getElementById('nextHeatmapBtn');
+
+    // New: Function to get today's date in 'YYYY-MM-DD' format
+    function getTodayDate() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = (now.getMonth() + 1).toString().padStart(2, '0');
+      const day = now.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    // New: Function to record a review event
+    function recordReview() {
+      const today = getTodayDate();
+      let reviewHistory = JSON.parse(localStorage.getItem('ankiGoReviewHistory') || '{}');
+      reviewHistory[today] = (reviewHistory[today] || 0) + 1;
+      try {
+        localStorage.setItem('ankiGoReviewHistory', JSON.stringify(reviewHistory));
+        console.log("Review recorded:", today, reviewHistory[today]);
+      } catch (e) {
+        console.error("Error saving review history to localStorage:", e);
+      }
+    }
+
+    // New: Function to draw the calendar-like heatmap
+    function drawCalendarHeatmap(endDate) {
+      const container = document.getElementById('calendarHeatmapContainer');
+      container.innerHTML = ''; // Clear previous heatmap
+
+      const reviewHistory = JSON.parse(localStorage.getItem('ankiGoReviewHistory') || '{}');
+      
+      const numDaysToShow = 7; // Only show the last 7 days
+      const daySize = 40; // Increased size of each day square
+      const gutter = 10; // Increased space between squares
+      const labelLineHeight = 14; // Increased font size for header labels
+      const headerLabelSpacing = 5; // Increased space between stacked label lines
+      const headerTopPadding = 20; // Increased padding from SVG top to first label line
+      const paddingBetweenLabelsAndBoxes = 10; // New: Additional vertical space between last label and the box
+
+      const svgWidth = numDaysToShow * (daySize + gutter) - gutter; // Remove last gutter for snug fit
+      const svgHeight = headerTopPadding + (labelLineHeight * 3) + (headerLabelSpacing * 2) + paddingBetweenLabelsAndBoxes + daySize + (gutter * 1.5); // Enough space for stacked labels + padding + a box + more space below
+
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("width", svgWidth);
+      svg.setAttribute("height", svgHeight);
+      svg.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
+      container.appendChild(svg);
+
+      const colorScale = [
+        "#ebedf0", // No reviews
+        "#9be9a8", // 1-4 reviews
+        "#40c463", // 5-9 reviews
+        "#30a14e", // 10-14 reviews
+        "#216e39"  // 15+ reviews
+      ];
+      const maxReviews = 15; // Cap for the color scale
+
+      const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const dayOfWeekShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+      // Calculate the start date of the 7-day period to display
+      const startDate = new Date(endDate);
+      startDate.setDate(endDate.getDate() - (numDaysToShow - 1));
+      startDate.setHours(0, 0, 0, 0); // Normalize to start of day
+
+      // Iterate for the numDaysToShow, starting from startDate forwards to position left-to-right
+      for (let i = 0; i < numDaysToShow; i++) {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() + i); // i=0 is startDate, i=1 is startDate + 1 day, etc.
+
+        const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+        const reviewsOnDay = reviewHistory[dateString] || 0;
+
+        const xRect = i * (daySize + gutter); // Horizontal position for the rect (i now goes from 0 to 6)
+        const yRect = headerTopPadding + (labelLineHeight * 3) + (headerLabelSpacing * 2) + paddingBetweenLabelsAndBoxes; // Y position for the rect, with added padding
+
+        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        rect.setAttribute("x", xRect);
+        rect.setAttribute("y", yRect);
+        rect.setAttribute("width", daySize);
+        rect.setAttribute("height", daySize);
+        rect.setAttribute("rx", 2); // Rounded corners
+        rect.setAttribute("ry", 2);
+
+        const fillColorIndex = reviewsOnDay === 0 ? 0 : Math.min(Math.floor((reviewsOnDay - 1) / Math.ceil(maxReviews / (colorScale.length - 1))) + 1, colorScale.length - 1);
+        rect.setAttribute("fill", colorScale[fillColorIndex]);
+        svg.appendChild(rect);
+
+        // Stacked date labels
+        const headerMonth = monthLabels[date.getMonth()];
+        const headerDay = date.getDate();
+        const headerDayOfWeek = dayOfWeekShort[date.getDay()];
+        const centerX = xRect + daySize / 2; // Center text above the box
+
+        // Month label
+        const monthText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        monthText.setAttribute("x", centerX);
+        monthText.setAttribute("y", headerTopPadding + labelLineHeight); // Position for month
+        monthText.setAttribute("text-anchor", "middle");
+        monthText.setAttribute("font-size", `${labelLineHeight - 2}px`);
+        monthText.setAttribute("fill", "#888");
+        monthText.textContent = headerMonth;
+        svg.appendChild(monthText);
+
+        // Day date label
+        const dayDateText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        dayDateText.setAttribute("x", centerX);
+        dayDateText.setAttribute("y", headerTopPadding + (labelLineHeight * 2) + headerLabelSpacing); // Position for day
+        dayDateText.setAttribute("text-anchor", "middle");
+        dayDateText.setAttribute("font-size", `${labelLineHeight}px`);
+        dayDateText.setAttribute("font-weight", "bold");
+        dayDateText.setAttribute("fill", "#333");
+        dayDateText.textContent = headerDay;
+        svg.appendChild(dayDateText);
+
+        // Day of week label
+        const dayOfWeekText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        dayOfWeekText.setAttribute("x", centerX);
+        dayOfWeekText.setAttribute("y", headerTopPadding + (labelLineHeight * 3) + (headerLabelSpacing * 2)); // Position for day of week
+        dayOfWeekText.setAttribute("text-anchor", "middle");
+        dayOfWeekText.setAttribute("font-size", `${labelLineHeight - 2}px`);
+        dayOfWeekText.setAttribute("fill", "#888");
+        dayOfWeekText.textContent = headerDayOfWeek;
+        svg.appendChild(dayOfWeekText);
+      }
+      updateHeatmapNavigationButtons(); // New: Update button states after drawing heatmap
+    }
+
+    // New: Function to update heatmap navigation button states
+    function updateHeatmapNavigationButtons() {
+      const currentHeatmapEndNormalized = new Date(currentHeatmapEndDate);
+      currentHeatmapEndNormalized.setHours(0, 0, 0, 0);
+
+      // 'Previous' button (left arrow) is always enabled
+      prevHeatmapBtn.disabled = false;
+
+      // 'Next' button (right arrow) is always enabled (can scroll indefinitely into the future)
+      nextHeatmapBtn.disabled = false;
+    }
+
+    // My Decks Logic
+    const decksListDiv = document.getElementById('decksList');
+    const practiceSectionDiv = document.getElementById('practiceSection');
+    const practiceDeckName = document.getElementById('practiceDeckName');
+    const flashcardCanvas = document.getElementById('flashcard');
+    const ctx = flashcardCanvas.getContext('2d');
+
+    const counterDisplay = document.getElementById('counter');
+    const knowCounterDisplay = document.getElementById('knowCounter');
+    const dontKnowCounterDisplay = document.getElementById('dontKnowCounter');
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const flipBtn = document.getElementById('flipBtn');
+    const knowBtn = document.getElementById('knowBtn');
+    const dontKnowBtn = document.getElementById('dontKnowBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const unknownOnlyBtn = document.getElementById('unknownOnlyBtn');
+    const backToDecksBtn = document.getElementById('backToDecksBtn');
+
+    let currentDeck = null;
+    let currentCardIndex = 0;
+    let showingFront = true;
+    let cardStatus = []; // null: not seen, true: known, false: unknown
+    let showingUnknownOnly = false;
+    let unknownIndexes = [];
+
+    function saveDecksToLocalStorage(decks) {
+      try {
+        localStorage.setItem('ankiGoDecks', JSON.stringify(decks));
+        console.log("Decks saved to localStorage successfully.");
+      } catch (e) {
+        console.error("Error saving decks to localStorage:", e);
+        showToast("Error saving progress: Could not save to storage. " + e.message, 'danger');
+      }
+    }
+
+    function getDecksFromLocalStorage() {
+      let decks = [];
+      try {
+        const storedDecks = localStorage.getItem('ankiGoDecks');
+        if (storedDecks) {
+          decks = JSON.parse(storedDecks);
+        }
+      } catch (e) {
+        console.error("Error parsing decks from localStorage:", e);
+        showToast("Error loading decks: Your saved data might be corrupted. Please try creating a new deck.", 'danger');
+      }
+      return decks;
+    }
+
+    function updateCounters() {
+      const totalCards = showingUnknownOnly ? unknownIndexes.length : currentDeck.cards.length;
+      const currentCardNum = totalCards > 0 ? currentCardIndex + 1 : 0;
+      counterDisplay.textContent = `Card ${currentCardNum}/${totalCards}`;
+
+      const knownCount = cardStatus.filter(status => status === true).length;
+      const dontKnowCount = cardStatus.filter(status => status === false).length;
+      knowCounterDisplay.textContent = `Known: ${knownCount}`;
+      dontKnowCounterDisplay.textContent = `Unknown: ${dontKnowCount}`;
+
+      // Disable practice buttons if no cards in current context
+      const hasCards = totalCards > 0;
+      flipBtn.disabled = !hasCards;
+      knowBtn.disabled = !hasCards;
+      dontKnowBtn.disabled = !hasCards;
+      prevBtn.disabled = !hasCards || currentCardIndex === 0;
+      nextBtn.disabled = !hasCards || currentCardIndex === totalCards - 1;
+    }
+
+    function updateUnknownIndexes() {
+      unknownIndexes = [];
+      currentDeck.cards.forEach((card, index) => {
+        if (cardStatus[index] === false || cardStatus[index] === null) {
+          unknownIndexes.push(index);
+        }
+      });
+    }
+
+    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      let lines = [];
+
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = context.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          lines.push(line);
+          line = words[n] + ' ';
+        } else {
+          line = testLine;
+        }
+      }
+      lines.push(line);
+
+      for (let n = 0; n < lines.length; n++) {
+        context.fillText(lines[n].trim(), x, y + (n * lineHeight));
+      }
+      return lines.length * lineHeight;
+    }
+
+    function drawCard() {
+      const flashcardCanvas = document.getElementById('flashcard');
+      const ctx = flashcardCanvas.getContext('2d');
+      const cardData = currentDeck.cards[showingUnknownOnly ? unknownIndexes[currentCardIndex] : currentCardIndex];
+
+      flashcardCanvas.width = flashcardCanvas.offsetWidth;
+      flashcardCanvas.height = flashcardCanvas.offsetHeight;
+
+      // Background - Complex Iridescent Gradient
+      const bgGradient = ctx.createLinearGradient(0, 0, flashcardCanvas.width, flashcardCanvas.height);
+      bgGradient.addColorStop(0, '#0f0f12'); // var(--color-dark-surface)
+      bgGradient.addColorStop(0.3, '#180a25'); // Dark purple hue
+      bgGradient.addColorStop(0.6, '#0a1a25'); // Dark blue hue
+      bgGradient.addColorStop(1, '#0f0f12');
+      ctx.fillStyle = bgGradient;
+      ctx.fillRect(0, 0, flashcardCanvas.width, flashcardCanvas.height);
+
+      // Glowing Border Effect (conceptual, drawn on canvas for more control)
+      ctx.strokeStyle = '#008cff'; // var(--color-neon-blue-electric)
+      ctx.shadowColor = '#008cff';
+      ctx.shadowBlur = 10; // Soft glow
+      ctx.lineWidth = 3;
+      ctx.lineJoin = 'round';
+      ctx.strokeRect(5, 5, flashcardCanvas.width - 10, flashcardCanvas.height - 10);
+
+      ctx.shadowBlur = 0; // Reset shadow for content
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      const centerX = flashcardCanvas.width / 2;
+      const centerY = flashcardCanvas.height / 2;
+      const maxWidth = flashcardCanvas.width * 0.8;
+      const lineHeight = 40;
+
+      if (showingFront) {
+        // Front side - Bold Kanji, geometric linework, particle effects
+
+        // Glowing Kanji character
+        ctx.font = 'bold 140px "Orbitron", sans-serif';
+        ctx.fillStyle = '#008cff'; // var(--color-neon-blue-electric)
+        ctx.shadowColor = '#008cff';
+        ctx.shadowBlur = 45; // Intense glow
+        ctx.fillText(cardData.word, centerX, centerY - 20);
+
+        ctx.shadowBlur = 0; // Reset shadow for other elements
+
+        // Intricate Geometric Linework (simple example)
+        ctx.strokeStyle = '#7a00ff'; // var(--color-neon-purple-deep)
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = 0.4;
+        ctx.beginPath();
+        // Top-left to center
+        ctx.moveTo(centerX - 150, centerY - 100);
+        ctx.lineTo(centerX - 50, centerY - 50);
+        // Top-right to center
+        ctx.moveTo(centerX + 150, centerY - 100);
+        ctx.lineTo(centerX + 50, centerY - 50);
+        // Bottom-left to center
+        ctx.moveTo(centerX - 150, centerY + 100);
+        ctx.lineTo(centerX - 50, centerY + 50);
+        // Bottom-right to center
+        ctx.moveTo(centerX + 150, centerY + 100);
+        ctx.lineTo(centerX + 50, centerY + 50);
+        ctx.stroke();
+        ctx.globalAlpha = 1.0; // Reset alpha
+
+        // Faint animated particle effects (static representation for now)
+        for (let i = 0; i < 50; i++) {
+          const x = Math.random() * flashcardCanvas.width;
+          const y = Math.random() * flashcardCanvas.height;
+          const radius = Math.random() * 1.5 + 0.5;
+          const alpha = Math.random() * 0.5 + 0.2;
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+          ctx.fill();
+        }
+
+      } else {
+        // Back side - Layered interface, holographic grids, minimalist typography
+
+        // Layered panels (rectangles with slight offsets/gradients)
+        ctx.fillStyle = 'rgba(25, 25, 30, 0.7)'; // var(--color-dark-glass)
+        ctx.fillRect(centerX - maxWidth / 2 + 10, centerY - flashcardCanvas.height / 2 + 10, maxWidth - 20, flashcardCanvas.height - 20);
+
+        // Abstract holographic grid
+        ctx.strokeStyle = 'rgba(0, 140, 255, 0.1)'; // var(--color-neon-blue-electric)
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < 20; i++) {
+          ctx.beginPath();
+          ctx.moveTo(0, i * (flashcardCanvas.height / 20));
+          ctx.lineTo(flashcardCanvas.width, i * (flashcardCanvas.height / 20));
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(i * (flashcardCanvas.width / 20), 0);
+          ctx.lineTo(i * (flashcardCanvas.width / 20), flashcardCanvas.height);
+          ctx.stroke();
+        }
+
+        // Meaning - refined cyberpunk typography with glow
+        ctx.font = 'bold 48px "Orbitron", sans-serif';
+        ctx.fillStyle = '#ff00c3'; // var(--color-neon-magenta-vibrant)
+        ctx.shadowColor = '#ff00c3';
+        ctx.shadowBlur = 20;
+        ctx.fillText(cardData.meaning, centerX, centerY - lineHeight - 20);
+
+        ctx.shadowBlur = 0; // Reset shadow for subtle text
+        ctx.font = '28px "Rajdhani", sans-serif';
+        ctx.fillStyle = '#e0e0e0'; // var(--color-card-text-primary)
+        let currentY = centerY + 10;
+        currentY += wrapText(ctx, `READING: ${cardData.reading.toUpperCase()}`, centerX, currentY, maxWidth, 35);
+        currentY += wrapText(ctx, `EXAMPLE: ${cardData.example.toUpperCase()}`, centerX, currentY + 15, maxWidth, 35); // Add slight space
+
+        // Subtle animated scanlines (static for now, can be animated later)
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < flashcardCanvas.height; i += 5) {
+          ctx.beginPath();
+          ctx.moveTo(0, i);
+          ctx.lineTo(flashcardCanvas.width, i);
+          ctx.stroke();
+        }
+      }
+      ctx.shadowBlur = 0; // Reset all shadows at the end
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+    }
+
+    function flipCard() {
+      showingFront = !showingFront;
+      drawCard();
+    }
+
+    function nextCard() {
+      if (showingUnknownOnly) {
+        if (currentCardIndex < unknownIndexes.length - 1) {
+          currentCardIndex++;
+        } else {
+          currentCardIndex = 0; // Loop back to start for unknown cards
+        }
+      } else {
+        if (currentCardIndex < currentDeck.cards.length - 1) {
+          currentCardIndex++;
+        } else {
+          currentCardIndex = 0; // Loop back to start for all cards
+        }
+      }
+      showingFront = true;
+      drawCard();
+      updateCounters();
+    }
+
+    function prevCard() {
+      if (showingUnknownOnly) {
+        if (currentCardIndex > 0) {
+          currentCardIndex--;
+        } else {
+          currentCardIndex = unknownIndexes.length > 0 ? unknownIndexes.length - 1 : 0; // Loop to end
+        }
+      } else {
+        if (currentCardIndex > 0) {
+          currentCardIndex--;
+        } else {
+          currentCardIndex = currentDeck.cards.length > 0 ? currentDeck.cards.length - 1 : 0; // Loop to end
+        }
+      }
+      showingFront = true;
+      drawCard();
+      updateCounters();
+    }
+
+    function markKnown() {
+      let actualIndex = showingUnknownOnly ? unknownIndexes[currentCardIndex] : currentCardIndex;
+      if (actualIndex !== undefined) {
+        cardStatus[actualIndex] = true;
+        // New: Record a review event
+        recordReview();
+        // Find the index of the currentDeck in the allDecks array to save its cardStatus
+        let allDecks = getDecksFromLocalStorage();
+        const deckToUpdateIndex = allDecks.findIndex(d => d.name === currentDeck.name);
+        if (deckToUpdateIndex !== -1) {
+          allDecks[deckToUpdateIndex].cardStatus = [...cardStatus]; // Save a copy
+          saveDecksToLocalStorage(allDecks);
+        }
+
+        if (showingUnknownOnly) {
+          // Remove from unknownIndexes and adjust currentCardIndex if necessary
+          unknownIndexes.splice(currentCardIndex, 1);
+          if (currentCardIndex >= unknownIndexes.length && unknownIndexes.length > 0) {
+            currentCardIndex = unknownIndexes.length - 1;
+          } else if (unknownIndexes.length === 0) {
+            currentCardIndex = 0;
+            // Optionally go back to all cards view if no unknowns left
+            showingUnknownOnly = false;
+            unknownOnlyBtn.textContent = "Show Unknown Only";
+            // Re-render based on all cards
+            currentCardIndex = 0;
+          }
+        }
+        nextCard(); // Move to the next card
+      }
+      updateCounters();
+    }
+
+    function markUnknown() {
+      let actualIndex = showingUnknownOnly ? unknownIndexes[currentCardIndex] : currentCardIndex;
+      if (actualIndex !== undefined) {
+        cardStatus[actualIndex] = false;
+        // New: Record a review event
+        recordReview();
+        // Ensure it's in unknownIndexes if not already (important for non-unknown-only mode)
+        if (!showingUnknownOnly && !unknownIndexes.includes(actualIndex)) {
+            unknownIndexes.push(actualIndex);
+        }
+        // Find the index of the currentDeck in the allDecks array to save its cardStatus
+        let allDecks = getDecksFromLocalStorage();
+        const deckToUpdateIndex = allDecks.findIndex(d => d.name === currentDeck.name);
+        if (deckToUpdateIndex !== -1) {
+          allDecks[deckToUpdateIndex].cardStatus = [...cardStatus]; // Save a copy
+          saveDecksToLocalStorage(allDecks);
+        }
+        nextCard(); // Move to the next card
+      }
+      updateCounters();
+    }
+
+    function resetAll() {
+      showConfirmationModal("Reset Deck Status", "Are you sure you want to reset the status of all cards in this deck? This will mark all cards as unseen.")
+        .then(confirmed => {
+          if (confirmed) {
+            cardStatus = new Array(currentDeck.cards.length).fill(null);
+            currentCardIndex = 0;
+            showingFront = true;
+            showingUnknownOnly = false;
+            unknownOnlyBtn.textContent = "Show Unknown Only";
+            updateUnknownIndexes(); // Re-initialize unknown indexes
+
+            // Update localStorage
+            let allDecks = getDecksFromLocalStorage();
+            const deckToUpdateIndex = allDecks.findIndex(d => d.name === currentDeck.name);
+            if (deckToUpdateIndex !== -1) {
+              allDecks[deckToUpdateIndex].cardStatus = [...cardStatus];
+              saveDecksToLocalStorage(allDecks);
+            }
+            drawCard();
+            updateCounters();
+            showToast("Deck status reset successfully.", 'info');
+          }
+        });
+    }
+
+    function toggleUnknownOnly() {
+      showingUnknownOnly = !showingUnknownOnly;
+      if (showingUnknownOnly) {
+        updateUnknownIndexes();
+        unknownOnlyBtn.textContent = `Show All (${currentDeck.cards.length})`;
+        currentCardIndex = 0; // Reset index for unknown-only view
+      } else {
+        unknownOnlyBtn.textContent = "Show Unknown Only";
+        currentCardIndex = 0; // Reset index for all-cards view
+      }
+      showingFront = true;
+      drawCard();
+      updateCounters();
+    }
+
+    function startPractice(deck) {
+      currentDeck = deck;
+      currentCardIndex = 0;
+      decksListDiv.style.display = 'none';
+      practiceSectionDiv.style.display = 'block';
+      practiceDeckName.textContent = deck.name;
+
+      // Initialize cardStatus if it doesn't exist or is of a different length
+      if (!currentDeck.cardStatus || currentDeck.cardStatus.length !== currentDeck.cards.length) {
+        currentDeck.cardStatus = new Array(currentDeck.cards.length).fill(null);
+      }
+      cardStatus = [...currentDeck.cardStatus]; // Copy to local state
+      
+      showingFront = true;
+      showingUnknownOnly = false;
+      unknownOnlyBtn.textContent = "Show Unknown Only"; // Reset button text
+      updateUnknownIndexes(); // Initial population of unknown indexes
+      updateCounters();
+      drawCard();
+    }
+
+    function loadDecks() {
+      console.log("Attempting to load decks...");
+      const decks = getDecksFromLocalStorage();
+      console.log("Loaded decks from localStorage:", decks);
+      decksListDiv.innerHTML = ''; // Clear existing decks
+
+      if (decks.length === 0) {
+        decksListDiv.innerHTML = '<p>No decks created yet. Go to <a href="./create-deck.html">Create a Deck</a> to get started!</p>';
+        return;
+      }
+
+      decks.forEach((deck, index) => {
+        const deckCardHtml = `
+          <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 position-relative">
+              <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="deckOptions${index}" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-three-dots"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="deckOptions${index}">
+                  <li><a class="dropdown-item delete-deck-btn" href="#" data-index="${index}">Delete Deck</a></li>
+                  <li><a class="dropdown-item rename-deck-btn" href="#" data-index="${index}">Rename Deck</a></li>
+                </ul>
+              </div>
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-primary deck-name-display" data-index="${index}">${deck.name}</h5>
+                <input type="text" class="form-control deck-name-input d-none" data-index="${index}" value="${deck.name}">
+                <p class="card-text">${deck.cards.length} cards</p>
+                <button class="btn btn-primary mt-auto select-deck-btn" data-index="${index}">Practice Deck</button>
+              </div>
+            </div>
+          </div>
+        `;
+        decksListDiv.insertAdjacentHTML('beforeend', deckCardHtml);
+      });
+
+      document.querySelectorAll('.select-deck-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const index = parseInt(this.dataset.index);
+          const allDecks = getDecksFromLocalStorage(); // Re-fetch to ensure latest state
+          startPractice(allDecks[index]);
+        });
+      });
+
+      // Event listeners for Delete button
+      document.querySelectorAll('.delete-deck-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          const indexToDelete = parseInt(this.dataset.index);
+          deleteDeck(indexToDelete);
+        });
+      });
+
+      // Event listeners for Rename button
+      document.querySelectorAll('.rename-deck-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          const indexToRename = parseInt(this.dataset.index);
+          enableInlineRename(indexToRename);
+        });
+      });
+
+      // New: Event listeners for inline rename input fields
+      document.querySelectorAll('.deck-name-input').forEach(input => {
+        input.addEventListener('blur', function() {
+          saveInlineRename(parseInt(this.dataset.index), this.value);
+        });
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            this.blur(); // Trigger blur to save
+          }
+        });
+      });
+    }
+
+    // Delete Deck function
+    function deleteDeck(index) {
+      // Removed confirmation for direct deletion
+      let decks = getDecksFromLocalStorage();
+      decks.splice(index, 1);
+      saveDecksToLocalStorage(decks);
+      loadDecks(); // Reload to update UI
+      showToast("Deck deleted successfully.", 'success');
+    }
+
+    // New: Enable inline rename
+    function enableInlineRename(index) {
+      const deckCard = document.querySelector(`.card-body .deck-name-display[data-index="${index}"]`).closest('.card-body');
+      const displayElement = deckCard.querySelector('.deck-name-display');
+      const inputElement = deckCard.querySelector('.deck-name-input');
+
+      if (displayElement && inputElement) {
+        displayElement.classList.add('d-none');
+        inputElement.classList.remove('d-none');
+        inputElement.focus();
+        inputElement.select(); // Select all text for easy editing
+      }
+    }
+
+    // New: Save inline rename
+    function saveInlineRename(index, newName) {
+      let decks = getDecksFromLocalStorage();
+      const oldName = decks[index].name;
+      const trimmedNewName = newName.trim();
+
+      const deckCard = document.querySelector(`.card-body .deck-name-display[data-index="${index}"]`).closest('.card-body');
+      const displayElement = deckCard.querySelector('.deck-name-display');
+      const inputElement = deckCard.querySelector('.deck-name-input');
+
+      if (trimmedNewName !== "" && trimmedNewName !== oldName) {
+        decks[index].name = trimmedNewName;
+        saveDecksToLocalStorage(decks);
+        displayElement.textContent = trimmedNewName; // Update displayed name
+        showToast(`Deck renamed to "${trimmedNewName}" successfully.`, 'success');
+      } else if (trimmedNewName === "") {
+        showToast("Deck name cannot be empty. Reverting to original name.", 'warning');
+        inputElement.value = oldName; // Revert input field
+      }
+      
+      // Revert to display mode
+      if (displayElement && inputElement) {
+        displayElement.classList.remove('d-none');
+        inputElement.classList.add('d-none');
+      }
+    }
+
+    // Event Listeners for practice controls
+    flipBtn.addEventListener('click', flipCard);
+    nextBtn.addEventListener('click', nextCard);
+    prevBtn.addEventListener('click', prevCard);
+    knowBtn.addEventListener('click', markKnown);
+    dontKnowBtn.addEventListener('click', markUnknown);
+    resetBtn.addEventListener('click', resetAll);
+    unknownOnlyBtn.addEventListener('click', toggleUnknownOnly);
+
+    backToDecksBtn.addEventListener('click', function() {
+      // Before going back, save the current deck's status
+      if (currentDeck) {
+        let allDecks = getDecksFromLocalStorage();
+        const deckIndex = allDecks.findIndex(d => d.name === currentDeck.name);
+        if (deckIndex !== -1) {
+          allDecks[deckIndex].cardStatus = [...cardStatus];
+          saveDecksToLocalStorage(allDecks);
+        }
+      }
+
+      decksListDiv.style.display = 'flex'; // Show deck list
+      practiceSectionDiv.style.display = 'none'; // Hide practice section
+      currentDeck = null; // Clear current deck state
+      currentCardIndex = 0;
+      cardStatus = [];
+      showingFront = true;
+      showingUnknownOnly = false;
+      loadDecks(); // Reload decks to show latest status or newly created ones
+      drawCalendarHeatmap(currentHeatmapEndDate); // Redraw calendar heatmap when returning to deck list
+    });
+
+    window.addEventListener('DOMContentLoaded', function() {
+      loadDecks();
+      // Initialize currentHeatmapEndDate to September 19th, 2025 (so the week starts on Sept 13th)
+      currentHeatmapEndDate = new Date('2025-09-19T00:00:00'); 
+      drawCalendarHeatmap(currentHeatmapEndDate); // Draw calendar heatmap on initial load
+
+      // New: Add event listeners for heatmap navigation buttons
+      prevHeatmapBtn.addEventListener('click', function() {
+        // This button (left arrow) will move BACKWARD in time
+        currentHeatmapEndDate.setDate(currentHeatmapEndDate.getDate() - numDaysToShow); // Go back 7 days
+        drawCalendarHeatmap(currentHeatmapEndDate);
+      });
+
+      nextHeatmapBtn.addEventListener('click', function() {
+        // This button (right arrow) will move FORWARD in time
+        currentHeatmapEndDate.setDate(currentHeatmapEndDate.getDate() + numDaysToShow); // Go forward 7 days
+        drawCalendarHeatmap(currentHeatmapEndDate);
+      });
+
+    });
+    window.addEventListener('resize', drawCard); // Redraw on resize to maintain responsiveness
+
+    // Add event listener to flashcard canvas for flipping
+    document.getElementById('flashcard').addEventListener('click', flipCard);
+
+    // New: Toast notification function
+    function showToast(message, type = 'info') {
+      const toastContainer = document.getElementById('toastContainer');
+      if (!toastContainer) {
+        console.error("Toast container not found.");
+        return;
+      }
+
+      const toastId = `toast-${Date.now()}`;
+      const toastHtml = `
+        <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+          <div class="d-flex">
+            <div class="toast-body">
+              ${message}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      `;
+      toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+      const toastElement = document.getElementById(toastId);
+      const toast = new bootstrap.Toast(toastElement);
+      toast.show();
+
+      // Remove toast from DOM after it's hidden
+      toastElement.addEventListener('hidden.bs.toast', function () {
+        toastElement.remove();
+      });
+    }
+
+  </script>
+
+</body>
+</html>

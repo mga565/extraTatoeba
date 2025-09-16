@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Anki Go - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <meta name="description" content="Anki Go - AI-powered flashcard platform for students and learners.">
+  <meta name="author" content="Iced Coffee">
+
+  <!-- Performance: Preconnect -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+  <!-- Progressive Web App -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Anki Go">
+  <meta name="theme-color" content="#000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Anki Go">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Bootswatch Minty Theme (Bootstrap 5) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3/dist/minty/bootstrap.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+
+  <!-- Custom styles -->
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap');
+
+  :root {
+        /* Base Theme Colors (Minty Bootstrap - Purple focus) */
+  --purple-50: #faf7ff;
+  --purple-100: #f3ecff;
+  --purple-300: #d9c7ff;
+  --purple-500: #b99bff;
+  --purple-600: #9a7ff;
+  --purple-700: #7e5eff;
+  --purple-900: #4b2b99;
+  --white-900: #ffffff;
+  --black-900: #010000;
+
+        /* Refined Neon Palette (Keeping variables for potential future use if needed, but not for these cards) */
+        --color-neon-purple-deep: #7a00ff;
+        --color-neon-blue-electric: #008cff;
+        --color-neon-magenta-vibrant: #ff00c3;
+        --color-dark-surface: #0f0f12;
+        --color-dark-glass: rgba(25, 25, 30, 0.7);
+        --color-metallic-sheen: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.1) 100%);
+
+        /* Text colors for the new card style */
+        --color-card-text-primary: #e0e0e0;
+        --color-card-text-secondary: #a0a0b0;
+
+        /* General UI Colors */
+        --color-ui-text-light: #f8f9fa;
+        --color-ui-text-dark: #212529;
+    }
+
+    /* Global Styles */
+    body {
+        font-family: 'Rajdhani', sans-serif;
+        line-height: 1.6;
+        color: var(--color-ui-text-dark); /* Default for light theme */
+        transition: background-color 0.3s ease, color 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    [data-bs-theme="dark"] body {
+        color: var(--color-ui-text-light);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 700;
+        color: var(--purple-700); /* Consistent heading color */
+        transition: color 0.3s ease;
+    }
+
+    [data-bs-theme="dark"] h1, [data-bs-theme="dark"] h2, [data-bs-theme="dark"] h3, 
+    [data-bs-theme="dark"] h4, [data-bs-theme="dark"] h5, [data-bs-theme="dark"] h6 {
+        color: var(--purple-300);
+}
+
+/* Navbar */
+    .navbar {
+  background-color: var(--purple-50) !important;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    [data-bs-theme="dark"] .navbar {
+        background-color: var(--purple-900) !important;
+        border-bottom: 1px solid var(--purple-700);
+    }
+
+    .navbar-brand {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 700;
+        color: var(--purple-700) !important;
+        transition: color 0.3s ease;
+    }
+    [data-bs-theme="dark"] .navbar-brand {
+        color: var(--purple-300) !important;
+    }
+
+    .nav-link {
+  color: var(--purple-700) !important;
+        transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .nav-link:hover {
+        color: var(--purple-900) !important;
+        transform: translateY(-2px);
+    }
+    [data-bs-theme="dark"] .nav-link {
+        color: var(--purple-300) !important;
+    }
+    [data-bs-theme="dark"] .nav-link:hover {
+        color: var(--purple-100) !important;
+    }
+
+    /* Buttons - General Styling */
+    .btn {
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 600;
+        text-transform: uppercase;
+        border-radius: 8px;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: var(--purple-700);
+        border-color: var(--purple-700);
+        color: var(--white-900); /* Ensure text is visible */
+        box-shadow: 0 4px 12px rgba(126, 94, 255, 0.3);
+    }
+    .btn-primary:hover {
+        background-color: var(--purple-600);
+        border-color: var(--purple-600);
+        box-shadow: 0 6px 16px rgba(126, 94, 255, 0.4);
+        transform: translateY(-2px);
+    }
+    [data-bs-theme="dark"] .btn-primary {
+        background-color: var(--purple-500);
+        border-color: var(--purple-500);
+        color: var(--white-900); /* Ensure text is visible in dark mode */
+        box-shadow: 0 4px 12px rgba(185, 155, 255, 0.3);
+    }
+    [data-bs-theme="dark"] .btn-primary:hover {
+        background-color: var(--purple-400);
+        border-color: var(--purple-400);
+        box-shadow: 0 6px 16px rgba(185, 155, 255, 0.4);
+    }
+
+    /* Specific override for 'Sign up' button text in navbar to ensure visibility */
+    .navbar .btn-primary, 
+    [data-bs-theme="dark"] .navbar .btn-primary {
+        color: var(--white-900) !important; /* Force white text */
+    }
+
+    .btn-outline-info { /* Used for Login/Create Deck */
+        color: var(--purple-700);
+        border-color: var(--purple-700);
+        background-color: transparent;
+    }
+    .btn-outline-info:hover {
+        background-color: var(--purple-700);
+        color: var(--white-900);
+        border-color: var(--purple-700);
+    }
+    [data-bs-theme="dark"] .btn-outline-info {
+        color: var(--purple-300);
+        border-color: var(--purple-300);
+    }
+    [data-bs-theme="dark"] .btn-outline-info:hover {
+        background-color: var(--purple-300);
+        color: var(--black-900);
+        border-color: var(--purple-300);
+    }
+
+    /* Main Content Sections */
+    .container.content-section {
+        flex: 1;
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        text-align: center;
+        padding: 80px 0;
+        background: linear-gradient(135deg, var(--purple-50) 0%, var(--purple-100) 100%);
+        border-radius: 15px;
+        margin-bottom: 50px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    [data-bs-theme="dark"] .hero-section {
+        background: linear-gradient(135deg, var(--purple-900) 0%, #1a1a20 100%);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .hero-section::before { /* Subtle background pattern */
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-image: radial-gradient(circle, var(--purple-300) 1px, transparent 1px);
+        background-size: 20px 20px;
+        opacity: 0.05;
+        animation: background-pan 60s infinite linear;
+    }
+    [data-bs-theme="dark"] .hero-section::before {
+        background-image: radial-gradient(circle, var(--purple-700) 1px, transparent 1px);
+        opacity: 0.1;
+    }
+    @keyframes background-pan {
+        from { background-position: 0 0; }
+        to { background-position: 100% 100%; }
+    }
+
+    .hero-section h1 {
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+        text-shadow: 0 0 15px rgba(126, 94, 255, 0.4);
+    }
+    .hero-section .lead {
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 600;
+    }
+
+    /* Existing Feature Cards (revert to original styling for now) */
+    .card.shadow-lg { box-shadow: 0 12px 30px rgba(123,87,255,0.09) !important; }
+    .card-title { font-family: 'Orbitron', sans-serif; }
+    .card-text { font-family: 'Rajdhani', sans-serif; }
+
+    /* Kanban Card Base Styles (from user's provided HTML) */
+.kanji-deck {
+  perspective: 1000px;
+  width: 200px;
+  height: 300px;
+  position: relative;
+}
+
+#kanjiCard2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+  text-align: center;
+  color: white;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #cc66ff, #4d4dff);
+  box-shadow: 0 0 40px rgba(204,102,255,0.8), 0 0 80px rgba(77,77,255,0.6);
+  cursor: pointer;
+  position: relative;
+}
+
+    #kanjiCard2:hover {
+      box-shadow: 0 0 80px rgb(60, 36, 146), 0 0 160px rgba(185,155,255,0.8);
+    }
+
+    /* --- Kanji Card FLIP Specific Styles --- */
+    .kanji-card-flip {
+      box-shadow: 0 0 20px rgba(126, 94, 255, 0.6);
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s ease-in-out;
+  cursor: pointer;
+  will-change: transform;
+  perspective: 1000px;
+  perspective-origin: center center;
+}
+
+.kanji-card-flip.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.kanji-card-flip .front,
+.kanji-card-flip .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backface-visibility: hidden;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+}
+
+.kanji-card-flip .front {
+  font-size: 5rem;
+  background: linear-gradient(135deg, #7e5eff, #b99bff);
+  text-shadow: 0 0 15px #fff, 0 0 25px #7e5eff, 0 0 35px #b99bff;
+}
+
+.kanji-card-flip .back {
+  background: linear-gradient(135deg, #4b2b99, #7e5eff);
+  transform: rotateY(180deg);
+  font-size: 1rem;
+  flex-direction: column;
+  color: #e0e0ff;
+  box-shadow: 0 0 15px #4b2b99, 0 0 25px #7e5eff;
+}
+
+    /* --- Kanji Card SHATTER Specific Styles (from user's provided HTML) --- */
+.kanji-card-shatter {
+  border-radius: 12px;
+  background: linear-gradient(135deg, #cc66ff, #4d4dff);
+  font-size: 5rem;
+  box-shadow: 0 0 40px rgba(204,102,255,0.8), 0 0 80px rgba(77,77,255,0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.1s ease;
+  will-change: transform, opacity;
+  color: white;
+}
+
+.kanji-card-shatter:hover {
+  box-shadow: 0 0 80px rgba(204,102,255,1), 0 0 160px rgba(77,77,255,0.8);
+}
+
+.piece {
+  position: absolute;
+  transform-origin: center;
+  transition: transform 1.2s cubic-bezier(0.68,-0.55,0.265,1.55), opacity 1.2s ease;
+  border-radius: 2px;
+  box-shadow: 0 0 15px rgba(204,102,255,0.9), 0 0 30px rgba(77,77,255,0.7);
+  background-size: 200px 300px;
+  filter: brightness(1.2) blur(0.5px);
+  will-change: transform, opacity;
+}
+
+    /* Carousel Specifics from User's Provided HTML */
+@keyframes flip {
+  0% { transform: rotateY(0deg); }
+  50% { transform: rotateY(180deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+.kanji-card-flip.step3 {
+  animation: flip 4s infinite; /* Apply animation for smooth flipping */
+  width: 200px;
+  height: 300px;
+  font-size: 5rem;
+}
+
+.kanji-card-flip.step3 .front,
+.kanji-card-flip.step3 .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.kanji-card-flip.step3 .front {
+  background: linear-gradient(135deg, #7e5eff, #b99bff);
+  color: #fff;
+  font-size: 5rem;
+  font-weight: bold;
+}
+
+.kanji-card-flip.step3 .back {
+  background: linear-gradient(135deg, #4b2b99, #7e5eff);
+  color: #e0e0ff;
+  font-size: 1rem;
+  line-height: 1.4;
+  padding: 10px;
+  transform: rotateY(180deg);
+}
+
+/* Center Step 3 carousel cards */
+#kanjiCarousel .carousel-inner {
+      text-align: center;
+}
+
+#kanjiCarousel {
+      width: 200px;
+      margin: 0 auto;
+}
+
+#kanjiCarousel .kanji-deck {
+  height: 300px;
+  margin: 0 auto;
+}
+
+    /* General layout for step sections */
+    .fullscreen-center {
+        height: 40vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding-left: 25%;
+    }
+
+    .step-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
+        margin: 70vh 0;
+    }
+
+    .step-text {
+        max-width: 400px;
+        margin-left: 50px;
+    }
+
+    .step-text h2 {
+        font-size: 2rem;
+        color: #7e5eff;
+        margin-bottom: 20px;
+    }
+
+    .step-text p {
+        font-size: 1.2rem;
+        line-height: 1.6;
+    }
+
+    /* Background sparkle effect (from user's provided HTML) */
+    body::before {
+        content: '';
+        position: fixed; /* Changed to fixed for full viewport coverage */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 1%, transparent 10%) repeat;
+        background-size: 50px 50px;
+        animation: sparkle 5s infinite linear;
+        pointer-events: none;
+        z-index: -1;
+        background-color: var(--purple-900); /* Use dark theme background */
+    }
+
+    @keyframes sparkle {
+        0% { background-position: 0 0; }
+        100% { background-position: 50px 50px; }
+    }
+
+    /* Remove custom body background from earlier to use Bootstrap theme */
+    body[data-bs-theme="light"]::before {
+        background-color: var(--purple-50); /* Light theme background for sparkle */
+        background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1%, transparent 10%) repeat; /* Darker sparkle for light theme */
+    }
+    
+    /* General overrides for Bootstrap elements to use standard colors */
+    .text-primary { color: var(--purple-700) !important; }
+    [data-bs-theme="dark"] .text-primary { color: var(--purple-300) !important; }
+
+    a, .nav-link { color: var(--purple-700) !important; }
+    [data-bs-theme="dark"] a, [data-bs-link] .nav-link { color: var(--purple-300) !important; }
+
+    .card.shadow-lg { box-shadow: 0 12px 30px rgba(123,87,255,0.09) !important; }
+    [data-bs-theme="dark"] .card.shadow-lg { box-shadow: 0 12px 30px rgba(0,0,0,0.5) !important; }
+
+</style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-md navbar-light fixed-top bg-primary-subtle">
+    <div class="container-fluid">
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <a class="navbar-brand fw-bold" href="./index.html">
+        Anki Go
+      </a>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link fw-bold active" aria-current="page" href="./index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link fw-bold" href="./create-deck.html">Create a Deck</a></li>
+          <li class="nav-item"><a class="nav-link fw-bold" href="./my-decks.html">My Decks</a></li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown me-2">
+            <a class="nav-link dropdown-toggle" href="#" id="bd-theme" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-circle-half"></i>
+              <span class="visually-hidden">Toggle theme</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme">
+              <li><button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light"><i class="bi bi-sun-fill"></i><span class="ms-2">Light</span></button></li>
+              <li><button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark"><i class="bi bi-moon-stars-fill"></i><span class="ms-2">Dark</span></button></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="./login.html" class="btn btn-outline-info fw-bold me-2">Log in</a></li>
+          <li class="nav-item"><a href="./signup.html" class="btn btn-primary fw-bold">Sign up</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE CONTENT -->
+<div class="container fullscreen-center">
+  <h1 class="text-primary fw-bold">Welcome to Anki Go</h1>
+  <p class="lead">Your AI-powered flashcard generator for faster, smarter learning.</p>
+</div>
+
+
+<div class="container">
+
+<!-- Step 1 -->
+<section class="step-section">
+  <div class="kanji-deck">
+    <div class="kanji-card kanji-card-flip" id="kanjiCard">
+      <div class="front">開</div>
+      <div class="back">
+        <div><strong>Meaning:</strong> Open</div>
+        <div><strong>Reading:</strong> かい (kai)</div>
+        <div><strong>Example:</strong> 開ける</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-text">
+    <h2>Step 1: Create Your Deck</h2>
+    <p>
+      Start by creating your own Kanji deck. Add your favorite Kanji characters and
+      their meanings. This deck will serve as your personalized flashcard collection
+      that you can review anytime. Watch the animated deck on the left for inspiration!
+    </p>
+  </div>
+</section>
+
+<!-- Step 2 -->
+<section class="step-section">
+  <!-- Left column: Kanji animation -->
+  <div class="kanji-deck" id="deck2">
+    <div class="kanji-card kanji-card-shatter" id="kanjiCard2" >止</div>
+  </div>
+
+  <!-- Right column: Text + Illustration -->
+  <div class="step-text">
+    <h2>Step 2: Smash the Kanji</h2>
+    <p>
+      Click on the Kanji card to see the futuristic glass shatter animation. Each click breaks the Kanji into shards with glowing effects, giving a sense of interactive learning and excitement!
+    </p>
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden mt-3">
+      <img src="./images/practice-deck.png" class="card-img-top" alt="Practice deck illustration">
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Step 3 -->
+<section class="step-section">
+  <div id="kanjiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+    <div class="carousel-inner text-center">
+
+      <!-- Card 1 -->
+      <div class="carousel-item active">
+        <div class="kanji-deck">
+          <div class="kanji-card kanji-card-flip step3">
+            <div class="front">開</div>
+            <div class="back">
+              <div><strong>Meaning:</strong> Open</div>
+              <div><strong>Reading:</strong> かい (kai)</div>
+              <div><strong>Example:</strong> 開ける</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="carousel-item">
+        <div class="kanji-deck">
+          <div class="kanji-card kanji-card-flip step3">
+            <div class="front">止</div>
+            <div class="back">
+              <div><strong>Meaning:</strong> Stop</div>
+              <div><strong>Reading:</strong> し (shi)</div>
+              <div><strong>Example:</strong> 止まる</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="carousel-item">
+        <div class="kanji-deck">
+          <div class="kanji-card kanji-card-flip step3">
+            <div class="front">話</div>
+            <div class="back">
+              <div><strong>Meaning:</strong> Talk</div>
+              <div><strong>Reading:</strong> わ (wa)</div>
+              <div><strong>Example:</strong> 話す</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="carousel-item">
+        <div class="kanji-deck">
+          <div class="kanji-card kanji-card-flip step3">
+            <div class="front">道</div>
+            <div class="back">
+              <div><strong>Meaning:</strong> Road</div>
+              <div><strong>Reading:</strong> どう (dō)</div>
+              <div><strong>Example:</strong> 道路</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="step-text">
+    <h2>Step 3: Carousel Practice</h2>
+    <p>
+      Watch the Kanji flip cards rotate automatically every 4 seconds — just like Step 1, but now in a carousel!
+    </p>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+function initializeColorModeToggler() {
+  const root = document.documentElement;
+  const storageKey = 'theme';
+  const getStored = () => localStorage.getItem(storageKey);
+  const setStored = val => localStorage.setItem(storageKey, val);
+  const getPreferred = () => {
+    const stored = getStored();
+    if (stored === 'light' || stored === 'dark') return stored;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+  const applyTheme = theme => { root.setAttribute('data-bs-theme', theme); setStored(theme); };
+  applyTheme(getPreferred());
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => { if (!getStored()) applyTheme(e.matches ? 'dark' : 'light'); });
+  document.querySelectorAll('[data-bs-theme-value]').forEach(btn => { btn.addEventListener('click', () => applyTheme(btn.getAttribute('data-bs-theme-value'))); });
+}
+window.addEventListener('DOMContentLoaded', initializeColorModeToggler);
+
+// ----------------------
+// Kanji auto-flip & shatter effects
+// ----------------------
+ 
+// Card 2: Shatter Card (Step 2)
+const card2 = document.getElementById('kanjiCard2');
+const deck2 = document.getElementById('deck2');
+
+function createKanjiImage(kanji) {
+  const canvas = document.createElement('canvas');
+  const scale = window.devicePixelRatio || 1;
+  canvas.width = 200 * scale;
+  canvas.height = 300 * scale;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(scale, scale);
+
+  // Gradient background
+  const gradient = ctx.createLinearGradient(0, 0, 200, 300);
+  gradient.addColorStop(0, '#cc66ff');
+  gradient.addColorStop(1, '#4d4dff');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 200, 300);
+
+  // Kanji text
+  ctx.fillStyle = 'white';
+  ctx.font = '80px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(kanji, 100, 150);
+
+  return canvas.toDataURL();
+}
+
+card2.addEventListener('click', () => {
+  const rect = card2.getBoundingClientRect();
+  const deckRect = deck2.getBoundingClientRect();
+  const pieces = [];
+  const rows = 15;
+  const cols = 15;
+  const pieceWidth = rect.width / cols;
+  const pieceHeight = rect.height / rows;
+  const kanjiImage = createKanjiImage(card2.textContent);
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const piece = document.createElement('div');
+      piece.classList.add('piece');
+      piece.style.width = pieceWidth + 'px';
+      piece.style.height = pieceHeight + 'px';
+      piece.style.left = rect.left - deckRect.left + c * pieceWidth + 'px';
+      piece.style.top = rect.top - deckRect.top + r * pieceHeight + 'px';
+      piece.style.backgroundImage = `url(${kanjiImage})`;
+      piece.style.backgroundPosition = `${-c*pieceWidth}px ${-r*pieceHeight}px`;
+      deck2.appendChild(piece);
+      pieces.push(piece);
+    }
+  }
+
+  requestAnimationFrame(() => {
+    pieces.forEach((p, i) => {
+      const angle = Math.random() * 2 * Math.PI;
+      const distance = Math.random() * 500 + 150;
+      const rotateX = Math.random() * 720 - 360;
+      const rotateY = Math.random() * 720 - 360;
+      const scale = Math.random() * 0.3 + 0.7;
+      const delay = i * 2;
+      setTimeout(() => {
+        p.style.transform = `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(${scale})`;
+        p.style.opacity = 0;
+      }, delay);
+    });
+    card2.style.opacity = 0;
+  });
+
+  setTimeout(() => {
+    pieces.forEach(p => p.remove());
+    card2.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    card2.style.opacity = 1;
+    card2.style.transform = 'rotateZ(0deg) scale(1)';
+  }, 1500);
+});
+</script>
+
+
+</body>
+
+</html>

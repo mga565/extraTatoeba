@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Anki Go - Create a Deck</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <meta name="description" content="Anki Go - AI-powered flashcard platform for students and learners.">
+  <meta name="author" content="Iced Coffee">
+
+  <!-- Performance: Preconnect -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+  <!-- Progressive Web App -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Anki Go">
+  <meta name="theme-color" content="#000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Anki Go">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Bootswatch Minty Theme (Bootstrap 5) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3/dist/minty/bootstrap.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+
+  <!-- Custom styles -->
+  <style>
+    :root {
+      --purple-50: #faf7ff;
+      --purple-100: #f3ecff;
+      --purple-300: #d9c7ff;
+      --purple-500: #b99bff;
+      --purple-600: #9a7ff;
+      --purple-700: #7e5eff;
+      --purple-900: #4b2b99;
+      --white-900: #ffffff;
+      --black-900: #010000;
+    }
+
+    /* Navbar */
+    .bg-primary-subtle { background-color: var(--purple-50) !important; }
+    [data-bs-theme="dark"] .bg-primary-subtle { background-color: var(--purple-900) !important; }
+    .navbar .navbar-brand, .navbar .navbar-brand * { color: var(--purple-700) !important; }
+    [data-bs-theme="dark"] .navbar .navbar-brand, [data-bs-theme="dark"] .navbar .navbar-brand * { color: var(--purple-300) !important; }
+
+    /* Buttons */
+    .btn-primary {
+      background-color: var(--purple-50) !important;
+      border-color: var(--purple-600) !important;
+      color: var(--purple-700) !important; /* Ensure text is visible in light mode */
+      box-shadow: 0 2px 6px rgba(248, 248, 250, 0.12);
+    }
+    .btn-primary:hover, .btn-primary:focus {
+      background-color: rgba(249, 249, 249, 0.06) !important;
+      border-color: var(--purple-700) !important;
+      color: var(--purple-700) !important; /* Ensure text is visible in light mode hover */
+    }
+    [data-bs-theme="dark"] .btn-primary {
+      background-color: var(--purple-700) !important;
+      border-color: var(--purple-600) !important;
+      color: var(--white-900) !important; /* Ensure text is visible in dark mode */
+    }
+    [data-bs-theme="dark"] .btn-primary:hover, [data-bs-theme="dark"] .btn-primary:focus {
+      background-color: var(--purple-600) !important;
+      border-color: var(--purple-500) !important;
+      color: var(--white-900) !important; /* Ensure text is visible in dark mode hover */
+    }
+
+    /* Specific override for 'Sign up' button text in navbar to ensure visibility */
+    .navbar .btn-primary, 
+    [data-bs-theme="dark"] .navbar .btn-primary {
+        color: var(--white-900) !important; /* Force white text */
+    }
+
+    .btn-outline-info { /* Purple button style for 'Create Deck' */
+      background-color: var(--purple-700) !important;
+      color: var(--purple-50) !important;
+      border-color: rgba(28, 0, 138, 0.645) !important;
+      box-shadow: 0 2px 6px rgba(248, 248, 250, 0.12);
+    }
+    .btn-outline-info:hover {
+      background-color: var(--purple-50) !important;
+      border-color: var(--purple-700) !important;
+      color: var(--purple-700) !important;
+    }
+    [data-bs-theme="dark"] .btn-outline-info {
+      background-color: var(--purple-500) !important;
+      border-color: var(--purple-300) !important;
+      color: var(--white-900) !important;
+    }
+    [data-bs-theme="dark"] .btn-outline-info:hover {
+      background-color: var(--purple-300) !important;
+      border-color: var(--purple-100) !important;
+      color: var(--purple-900) !important;
+    }
+
+    /* Links */
+    a, .nav-link { color: var(--purple-700) !important; }
+    [data-bs-theme="dark"] a, [data-bs-theme="dark"] .nav-link { color: var(--purple-300) !important; }
+    a:hover { color: var(--purple-900) !important; }
+    [data-bs-theme="dark"] a:hover { color: var(--purple-100) !important; }
+    .text-primary { color: var(--purple-700) !important; }
+    [data-bs-theme="dark"] .text-primary { color: var(--purple-300) !important; }
+
+    /* Card shadow */
+    .card.shadow-lg { box-shadow: 0 12px 30px rgba(123,87,255,0.09) !important; }
+
+    /* Page spacing */
+    .pt-navbar { padding-top: 72px; }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .container.content-section {
+      flex: 1;
+      padding-top: 50px;
+      padding-bottom: 50px;
+    }
+
+    /* Form styling */
+    .deck-form {
+      background-color: var(--purple-100);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    [data-bs-theme="dark"] .deck-form {
+      background-color: var(--purple-900);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Kanji card selection styles */
+    .kanji-card-selectable {
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      background-color: var(--white-900);
+      border: 1px solid #dee2e6; /* Default border */
+    }
+    .kanji-card-selectable:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    [data-bs-theme="dark"] .kanji-card-selectable {
+      background-color: #343a40;
+      border: 1px solid #495057;
+    }
+    [data-bs-theme="dark"] .kanji-card-selectable:hover {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .kanji-card-selected {
+      background-color: #e0f2f7; /* Light blue background for selected */
+      border: 2px solid #40c0f0; /* Bright blue border for selected */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    [data-bs-theme="dark"] .kanji-card-selected {
+      background-color: #004d40; /* Dark green for selected in dark mode */
+      border: 2px solid #1de9b6; /* Lighter green border in dark mode */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-md navbar-light fixed-top bg-primary-subtle">
+    <div class="container-fluid">
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <a class="navbar-brand fw-bold" href="./index.html">
+        Anki Go
+      </a>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link fw-bold" href="./index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link fw-bold" href="./create-deck.html">Create a Deck</a></li>
+          <li class="nav-item"><a class="nav-link fw-bold" href="./my-decks.html">My Decks</a></li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown me-2">
+            <a class="nav-link dropdown-toggle" href="#" id="bd-theme" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-circle-half"></i>
+              <span class="visually-hidden">Toggle theme</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme">
+              <li><button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light"><i class="bi bi-sun-fill"></i><span class="ms-2">Light</span></button></li>
+              <li><button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark"><i class="bi bi-moon-stars-fill"></i><span class="ms-2">Dark</span></button></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="./login.html" class="btn btn-outline-info fw-bold me-2">Log in</a></li>
+          <li class="nav-item"><a href="./signup.html" class="btn btn-primary fw-bold">Sign up</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container content-section">
+    <h1 class="text-primary fw-bold">Create a New Deck</h1>
+    <p class="lead">Use this page to create your personalized flashcard decks by selecting JLPT N5 Kanji.</p>
+
+    <form id="createDeckForm" class="mt-4 deck-form">
+      <div class="mb-3">
+        <label for="deckName" class="form-label">Deck Name</label>
+        <input type="text" class="form-control" id="deckName" required>
+      </div>
+      <h4 class="mt-4">Select JLPT N5 Kanji for your Deck:</h4>
+      <div id="jlptN5KanjiSelection" class="row mt-3">
+        <!-- JLPT N5 Kanji cards will be loaded here -->
+      </div>
+      <button type="submit" class="btn btn-outline-info mt-4">Create Deck</button>
+    </form>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer mt-auto py-4 bg-primary-subtle">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="text-muted">&copy; 2025 Anki Go. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <ul class="list-inline">
+            <li class="list-inline-item"><a href="#" class="text-muted">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="#" class="text-muted">Terms of Service</a></li>
+            <li class="list-inline-item"><a href="#" class="text-muted">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="./data/jlpt_n5.js"></script>
+  <script>
+    // Color Mode Toggler
+    function initializeColorModeToggler() {
+      const root = document.documentElement;
+      const storageKey = 'theme';
+      const getStored = () => localStorage.getItem(storageKey);
+      const setStored = val => localStorage.setItem(storageKey, val);
+      const getPreferred = () => {
+        const stored = getStored();
+        if (stored === 'light' || stored === 'dark') return stored;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+      const applyTheme = theme => { root.setAttribute('data-bs-theme', theme); setStored(theme); };
+      applyTheme(getPreferred());
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => { if (!getStored()) applyTheme(e.matches ? 'dark' : 'light'); });
+      document.querySelectorAll('[data-bs-theme-value]').forEach(btn => { btn.addEventListener('click', () => applyTheme(btn.getAttribute('data-bs-theme-value'))); });
+    }
+    window.addEventListener('DOMContentLoaded', initializeColorModeToggler);
+
+    // New: Toast notification function (copied from my-decks.html)
+    function showToast(message, type = 'info') {
+      const toastContainer = document.getElementById('toastContainer');
+      if (!toastContainer) {
+        console.error("Toast container not found.");
+        return;
+      }
+
+      const toastId = `toast-${Date.now()}`;
+      const toastHtml = `
+        <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+          <div class="d-flex">
+            <div class="toast-body">
+              ${message}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      `;
+      toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+      const toastElement = document.getElementById(toastId);
+      const toast = new bootstrap.Toast(toastElement);
+      toast.show();
+
+      // Remove toast from DOM after it's hidden
+      toastElement.addEventListener('hidden.bs.toast', function () {
+        toastElement.remove();
+      });
+    }
+
+    // Deck Creation Logic
+    const jlptN5KanjiSelection = document.getElementById('jlptN5KanjiSelection');
+
+    function loadN5Kanji() {
+      if (typeof jlptN5Kanji === 'undefined') {
+        console.error("jlptN5Kanji data is not loaded.");
+        jlptN5KanjiSelection.innerHTML = '<p class="text-danger">Error: Kanji data not available. Please ensure data/jlpt_n5.js is correctly linked.</p>';
+        return;
+      }
+
+      jlptN5Kanji.forEach((kanjiData, index) => {
+        const kanjiCardHtml = `
+          <div class="col-md-3 mb-3">
+            <div class="card shadow-sm h-100 kanji-card-selectable" data-index="${index}" data-selected="false">
+              <div class="card-body d-flex flex-column justify-content-between">
+                <h5 class="card-title text-primary text-center">${kanjiData.word}</h5>
+                <p class="card-text text-center">${kanjiData.meaning}</p>
+              </div>
+            </div>
+          </div>
+        `;
+        jlptN5KanjiSelection.insertAdjacentHTML('beforeend', kanjiCardHtml);
+      });
+    }
+
+    document.getElementById('createDeckForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const deckName = document.getElementById('deckName').value.trim();
+      const selectedKanji = [];
+
+      document.querySelectorAll('#jlptN5KanjiSelection .kanji-card-selectable').forEach(card => {
+        const index = parseInt(card.getAttribute('data-index'));
+        const isSelected = card.getAttribute('data-selected') === 'true';
+        if (isSelected) {
+          selectedKanji.push(jlptN5Kanji[index]);
+        }
+      });
+
+      if (deckName === "") {
+        showToast('Please provide a deck name.', 'warning');
+        return;
+      }
+
+      if (selectedKanji.length === 0) {
+        showToast('Please select at least one Kanji for your deck.', 'warning');
+        return;
+      }
+
+      const newDeck = { 
+        name: deckName, 
+        cards: selectedKanji,
+        cardStatus: new Array(selectedKanji.length).fill(null) // Initialize card status
+      };
+      
+      try {
+        let decks = JSON.parse(localStorage.getItem('ankiGoDecks') || '[]');
+        decks.push(newDeck);
+        localStorage.setItem('ankiGoDecks', JSON.stringify(decks));
+        console.log('Deck "' + deckName + '" created successfully:', newDeck);
+        showToast('Deck "' + deckName + '" created successfully!', 'success');
+        window.location.href = './my-decks.html'; 
+      } catch (e) {
+        console.error("Error saving deck to localStorage:", e);
+        showToast("Error creating deck: Could not save to storage. " + e.message, 'danger');
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', function() {
+      loadN5Kanji();
+
+      jlptN5KanjiSelection.addEventListener('click', function(e) {
+        const card = e.target.closest('.kanji-card-selectable');
+        if (card) {
+          let isSelected = card.getAttribute('data-selected') === 'true';
+          isSelected = !isSelected;
+          card.setAttribute('data-selected', isSelected);
+          if (isSelected) {
+            card.classList.add('kanji-card-selected');
+          } else {
+            card.classList.remove('kanji-card-selected');
+          }
+        }
+      });
+    });
+
+  </script>
+
+</body>
+<!-- Toast Container -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;" id="toastContainer"></div>
+</html>
